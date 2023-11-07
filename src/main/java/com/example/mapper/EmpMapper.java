@@ -8,20 +8,24 @@ import java.util.List;
 
 @Mapper
 public interface EmpMapper {
-//    删除员工
+    //    删除员工
     @Delete("delete from tb_emp where id=#{id}")
     public int delete(Integer id);
-//添加员工
-    @Options(useGeneratedKeys = true,keyProperty = "id")
+
+    //添加员工
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     @Insert("insert into tb_emp(username, name, gender, image, job, entrydate, dept_id, create_time, update_time)" +
             "values (#{username},#{name},#{gender},#{image},#{job},#{entryDate},#{deptId},#{createTime},#{updateTime});")
     public void insert(Emp emp);
 
-//    更新员工
+    //    更新员工
     @Update("update tb_emp set username = #{username},name=#{name},gender=#{gender},image=#{image},job=#{job},entrydate=#{entryDate},dept_id=#{deptId},update_time=#{updateTime} where id= #{id}")
     public void update(Emp emp);
 
-//    单条查询
+    //    动态更新员工
+    public void update2(Emp emp);
+
+    //    单条查询
 //    开启驼峰映射
     @Select("select * from tb_emp where id=#{id}")
     public Emp getById(Integer id);
@@ -40,7 +44,13 @@ public interface EmpMapper {
 //    public Emp getById(Integer id);
 
 //    条件查询
-    @Select("select * from tb_emp where name like concat('%',#{name},'%') and gender=#{gender} and entrydate between #{start} and #{end};")
-    public List<Emp> list(String name, short gender, LocalDate start,LocalDate end);
+//    @Select("select * from tb_emp where name like concat('%',#{name},'%') and gender=#{gender} and entrydate between #{start} and #{end};")
+//    public List<Emp> list(String name, short gender, LocalDate start,LocalDate end);
+
+    //xml映射文件
+    public List<Emp> list(String name, Short gender, LocalDate start, LocalDate end);
+
+//    批量删除
+    public void deleteAll(List<Integer> ids);
 
 }

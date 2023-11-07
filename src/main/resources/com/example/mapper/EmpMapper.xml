@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.EmpMapper">
+    <sql id="commitSelect">
+        select id, username, password, name, gender, image, job, entrydate, dept_id, create_time, update_time
+        from tb_emp
+    </sql>
+
+    <update id="update2">
+        update tb_emp
+        <set>
+            <if test="username !=null">username =#{username},</if>
+            <if test=" name!=null">name=#{name},</if>
+            <if test="gender !=null">gender=#{gender},</if>
+            <if test="image !=null">image=#{image},</if>
+            <if test="job !=null">job=#{job},</if>
+            <if test="entryDate !=null">entrydate=#{entryDate},</if>
+            <if test="deptId !=null">dept_id=#{deptId},</if>
+            <if test="updateTime !=null">update_time=#{updateTime}</if>
+        </set>
+        where id= #{id}
+    </update>
+    <select id="list" resultType="com.example.pojo.Emp">
+       <include refid="commitSelect"></include>
+        <where>
+            <if test="name !=null">name like concat('%',#{name},'%')</if>
+            <if test="gender!=null">and gender=#{gender}</if>
+            <if test="start!=null and end!=null">and entrydate between #{start} and #{end};</if>
+        </where>
+    </select>
+    <delete id="deleteAll">
+        delete from tb_emp where id in
+        <foreach collection="ids" item="ele" separator="," open="(" close=")">
+            #{ele}
+        </foreach>
+    </delete>
+</mapper>
